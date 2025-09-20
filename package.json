@@ -1,0 +1,54 @@
+{
+  "name": "splunk-query-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.bundle.js",
+  "bin": "src/index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "eslint . && node --experimental-vm-modules --no-warnings ./node_modules/jest/bin/jest.js",
+    "build": "npm run test && webpack --config webpack.config.js",
+    "pkg:build": "npm run build && pkg dist/index.bundle.js --out-path release",
+    "e2e:up": "docker-compose -f test/e2e/docker-compose.yml up -d",
+    "e2e:down": "docker-compose -f test/e2e/docker-compose.yml down",
+    "e2e": "npm run pkg:build && playwright test test/e2e/splunk-e2e.spec.js"
+  },
+  "pkg": {
+    "targets": [
+      "node18-win-x64",
+      "node18-linux-x64",
+      "node18-macos-x64"
+    ],
+    "outputPath": "release",
+    "options": [
+      "--compress=Brotli"
+    ]
+  },
+  "author": {
+    "name": "Developer",
+    "email": "dev@example.com",
+    "url": "https://example.com"
+  },
+  "dependencies": {
+    "commander": "^10.0.0",
+    "log4js": "^6.9.1",
+    "node-fetch": "^3.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@jest/globals": "^28.1.3",
+    "@playwright/test": "^1.41.2",
+    "babel-jest": "^28.1.3",
+    "copy-webpack-plugin": "^11.0.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.40.0",
+    "eslint-plugin-jsdoc": "^50.8.0",
+    "eslint-plugin-sonarjs": "^0.19.0",
+    "html-webpack-plugin": "^5.5.0",
+    "jest": "^28.1.3",
+    "pkg": "^5.8.1",
+    "webpack": "^5.99.8",
+    "webpack-cli": "^5.0.1"
+  }
+}

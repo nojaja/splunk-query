@@ -1,0 +1,29 @@
+You are GitHub Copilot. 以下はこのリポジトリで CLI ツールを実装するための日本語プロンプトです。
+
+目的:
+- Splunk に対して検索を実行し、CSV/JSON/console に出力する Node.js (ESM) CLI ツールを実装してください。
+
+重要制約:
+- dynamic import (import()) の使用は禁止です。すべて静的 import/export を用いてください。
+- E2E テストは必ず Docker Compose で起動した Splunk Enterprise (SplunkEE) に接続して実行してください。ローカルでの手順は `implementation_notes.md` を参照してください。
+
+実装ファイル（推奨）:
+- `src/cli.js`, `src/index.js`, `src/app.js`, `src/SplunkService.js`, `src/utils/normalizeResults.js`, `src/output/csvWriter.js`, `src/output/jsonWriter.js`
+
+実装ヒント:
+- CLI は `commander` を使い、`--query` > `--query-file` > stdin の優先度でクエリを取得します。
+- SplunkService.search(query) は `{ fields, rows }` を返すこと。
+- 出力前に出力先の親ディレクトリを `fs.promises.mkdir(..., { recursive: true })` で作成してください。
+- エラーは SearchError クラスを定義して投げ、CLI は適切な exit code を返してください。
+
+テスト:
+- unit tests は Jest で実装し、外部通信はモック化してください。
+- E2E は `docker-compose` を用いて SplunkEE を起動し、実際に認証情報を渡して実行すること。
+
+提供するドキュメント:
+- `spec.md`, `design.md`, `requirements.md`, `implementation_notes.md` を参照し、追加の疑問があれば実装前に確認を求めてください。
+
+完了基準:
+- `npm run test`（unit）が通ること。
+- `npm run lint` がエラーを出さないこと（ESLint の complexity ルール適用）。
+- `npm run build` が成功し `dist/index.bundle.js` が生成されること。

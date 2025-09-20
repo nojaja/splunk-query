@@ -1,0 +1,25 @@
+services:
+  splunk:
+    build:
+      context: .
+      dockerfile: Dockerfile.splunk
+    image: splunk/e2e-test:8.2.0
+    command: start
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_PASSWORD
+      - HEC_TOKEN
+    user: root
+    ports:
+      - "8000:8000"
+      - "8089:8089"
+      - "8088:8088"
+    volumes:
+      - e2e-logs:/tmp/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      retries: 10
+
+volumes:
+  e2e-logs: {}
