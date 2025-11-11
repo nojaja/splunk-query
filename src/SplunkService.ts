@@ -164,7 +164,7 @@ export class SplunkService {
 
       return await new Promise<any>((resolve, reject) => {
         // @ts-ignore - splunk-sdk typings are not strict here
-        svc.oneshotSearch(`search ${qbody}`, { output_mode: 'json', count: 100 }, (err: any, results: any) => {
+        svc.oneshotSearch(`${qbody}`, { output_mode: 'json', count: 100 }, (err: any, results: any) => {
           if (err) {
             if (this.verbose) this.logger.debug('oneshotSearch error', err);
             return reject(err);
