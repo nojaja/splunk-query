@@ -1,4 +1,5 @@
-import { normalizeResults } from '../../src/utils/normalizeResults.js';
+import { describe, it, expect } from '@jest/globals';
+import { normalizeResults } from '../../src/utils/normalizeResults';
 
 describe('normalizeResults', () => {
   it('converts fields/rows to objects', () => {

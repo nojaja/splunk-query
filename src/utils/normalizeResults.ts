@@ -1,3 +1,5 @@
+export type RawResult = any;
+export type NormalizedObject = { [k: string]: string } | { _raw: string };
 /**
  * Splunk検索結果を正規化します
  * @param {object} input - 検索結果オブジェクト
@@ -6,7 +8,7 @@
  * @param {Array} input.results - 結果配列
  * @returns {Array} - 正規化された結果配列
  */
-export function normalizeResults({ fields, rows, results }) {
+export function normalizeResults({ fields, rows, results }: { fields?: string[]; rows?: any[]; results?: any[] }): NormalizedObject[] {
   // results配列が存在し、rows配列がnullまたは空の場合は、resultsを使用
   if (results && Array.isArray(results) && results.length > 0) {
     return _normalizeResultsArray(results);
@@ -28,11 +30,9 @@ export function normalizeResults({ fields, rows, results }) {
  * @param {Array} results - 結果配列
  * @returns {Array} - 正規化された結果配列
  */
-function _normalizeResultsArray(results) {
+function _normalizeResultsArray(results: any[]): NormalizedObject[] {
   return results.map(row => {
-    if (row && typeof row === 'object') {
-      return _createObjectFromRow(row);
-    }
+    if (row && typeof row === 'object') return _createObjectFromRow(row);
     return { _raw: String(row) };
   });
 }
@@ -42,8 +42,8 @@ function _normalizeResultsArray(results) {
  * @param {object} row - 行オブジェクト
  * @returns {object} - 正規化されたオブジェクト
  */
-function _createObjectFromRow(row) {
-  const obj = {};
+function _createObjectFromRow(row: any): NormalizedObject {
+  const obj: any = {};
   for (const k of Object.keys(row)) {
     const v = row[k];
     obj[k] = _normalizeValue(v);
@@ -56,16 +56,11 @@ function _createObjectFromRow(row) {
  * @param {any} v - 正規化する値
  * @returns {string} - 正規化された文字列
  */
-function _normalizeValue(v) {
-  if (v === null || v === undefined) {
-    return '';
-  } else if (Array.isArray(v)) {
-    return v.join(','); // 配列は文字列で結合
-  } else if (typeof v === 'object') {
-    return JSON.stringify(v); // オブジェクトはJSON文字列に
-  } else {
-    return String(v);
-  }
+function _normalizeValue(v: any): string {
+  if (v === null || v === undefined) return '';
+  if (Array.isArray(v)) return v.join(',');
+  if (typeof v === 'object') return JSON.stringify(v);
+  return String(v);
 }
 
 /**
@@ -73,7 +68,7 @@ function _normalizeValue(v) {
  * @param {any} r - 行データ
  * @returns {object} - 変換されたオブジェクト
  */
-function _convertRowWithoutFields(r) {
+function _convertRowWithoutFields(r: any): NormalizedObject {
   if (Array.isArray(r)) return { _raw: r.join(' ') };
   if (r && typeof r === 'object') return r;
   return { _raw: String(r) };
@@ -85,13 +80,9 @@ function _convertRowWithoutFields(r) {
  * @param {Array} fields - フィールド配列
  * @returns {object} - 変換されたオブジェクト
  */
-function _convertRowWithFields(row, fields) {
-  if (Array.isArray(row)) {
-    return _convertArrayRow(row, fields);
-  }
-  if (row && typeof row === 'object') {
-    return _convertObjectRow(row);
-  }
+function _convertRowWithFields(row: any, fields: string[]): NormalizedObject {
+  if (Array.isArray(row)) return _convertArrayRow(row, fields);
+  if (row && typeof row === 'object') return _convertObjectRow(row);
   return { _raw: String(row) };
 }
 
@@ -101,8 +92,8 @@ function _convertRowWithFields(row, fields) {
  * @param {Array} fields - フィールド配列
  * @returns {object} - 変換されたオブジェクト
  */
-function _convertArrayRow(row, fields) {
-  const obj = {};
+function _convertArrayRow(row: any[], fields: string[]): NormalizedObject {
+  const obj: any = {};
   for (let i = 0; i < fields.length; i++) {
     const v = row[i];
     obj[fields[i]] = (v === null || v === undefined || typeof v === 'object') ? '' : v;
@@ -115,8 +106,8 @@ function _convertArrayRow(row, fields) {
  * @param {object} row - 行オブジェクト
  * @returns {object} - 正規化されたオブジェクト
  */
-function _convertObjectRow(row) {
-  const obj = {};
+function _convertObjectRow(row: any): NormalizedObject {
+  const obj: any = {};
   for (const k of Object.keys(row)) {
     const v = row[k];
     obj[k] = (v === null || v === undefined || typeof v === 'object') ? '' : v;

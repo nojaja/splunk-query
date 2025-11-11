@@ -34,12 +34,7 @@ export function initLogger(verbose = false) {
   
   // verboseモードに応じてログレベルを調整
   const logger = log4js.getLogger();
-  if (verbose) {
-    logger.level = 'DEBUG';
-  } else {
-    logger.level = 'INFO';
-  }
-  
+  logger.level = verbose ? 'DEBUG' : 'INFO';
   return logger;
 }
 
@@ -47,6 +42,9 @@ export function initLogger(verbose = false) {
  * ログ出力のユーティリティクラス
  */
 export class Logger {
+  private logger: log4js.Logger;
+  private verbose: boolean;
+
   /**
    * Loggerのコンストラクタ
    * @param {boolean} verbose - verboseモードの有効/無効
@@ -61,7 +59,7 @@ export class Logger {
  * @param {string} message - ログメッセージ
  * @param {...any} args - 追加引数
  */
-  info(message, ...args) {
+  info(message: string, ...args: any[]) {
     this.logger.info(message, ...args);
   }
 
@@ -70,7 +68,7 @@ export class Logger {
    * @param {string} message - ログメッセージ
    * @param {...any} args - 追加引数
    */
-  error(message, ...args) {
+  error(message: string, ...args: any[]) {
     this.logger.error(message, ...args);
   }
 
@@ -79,7 +77,7 @@ export class Logger {
    * @param {string} message - ログメッセージ
    * @param {...any} args - 追加引数
    */
-  warn(message, ...args) {
+  warn(message: string, ...args: any[]) {
     this.logger.warn(message, ...args);
   }
 
@@ -88,10 +86,8 @@ export class Logger {
    * @param {string} message - ログメッセージ
    * @param {...any} args - 追加引数
    */
-  debug(message, ...args) {
-    if (this.verbose) {
-      this.logger.debug(`[詳細] ${message}`, ...args);
-    }
+  debug(message: string, ...args: any[]) {
+    if (this.verbose) this.logger.debug(`[詳細] ${message}`, ...args);
   }
 
   /**
@@ -99,7 +95,7 @@ export class Logger {
    * @param {string} message - ログメッセージ
    * @param {...any} args - 追加引数
    */
-  verbose(message, ...args) {
+  verboseLog(message: string, ...args: any[]) {
     this.debug(message, ...args);
   }
 
@@ -108,7 +104,7 @@ export class Logger {
    * @param {string} message - ログメッセージ
    * @param {...any} args - 追加引数
    */
-  progress(message, ...args) {
+  progress(message: string, ...args: any[]) {
     this.logger.info(`[進行] ${message}`, ...args);
   }
 
@@ -117,7 +113,7 @@ export class Logger {
    * @param {string} message - ログメッセージ
    * @param {...any} args - 追加引数
    */
-  success(message, ...args) {
+  success(message: string, ...args: any[]) {
     this.logger.info(`[成功] ${message}`, ...args);
   }
 }
