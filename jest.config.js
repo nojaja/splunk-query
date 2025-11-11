@@ -1,12 +1,27 @@
 export default {
+  preset: 'ts-jest',
   testEnvironment: 'node',
-  moduleFileExtensions: ['js', 'json'],
-  testMatch: ['<rootDir>/test/unit/**/*.test.js'],
+  moduleFileExtensions: ['ts', 'js', 'json', 'node'],
+  testMatch: ['<rootDir>/test/unit/**/*.test.ts'],
   verbose: false,
   silent: false,
+  collectCoverage: true,
+  coverageDirectory: '<rootDir>/coverage',
   transform: {
-    '^.+\\.js$': ['babel-jest', { configFile: './babel.config.cjs' }]
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      {
+        tsconfig: 'tsconfig.json'
+      }
+    ]
   },
-  testTimeout: 10000,
-  setupFilesAfterEnv: ['<rootDir>/test/setup.js']
+  coverageThreshold: {
+    global: {//変更禁止
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    }
+  },
+  testTimeout: 10000
 };

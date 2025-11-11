@@ -1,7 +1,8 @@
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import fs from 'fs/promises';
 import path from 'path';
-import { writeCsv } from '../../src/output/csvWriter.js';
-import { writeJson } from '../../src/output/jsonWriter.js';
+import { writeCsv } from '../../src/output/csvWriter';
+import { writeJson } from '../../src/output/jsonWriter';
 
 const TMP = path.resolve('./test/tmp');
 
