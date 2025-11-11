@@ -8,26 +8,32 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "test": "jest --config=jest.config.js --coverage",
     "build": "tsc -p tsconfig.json",
+    "pkg:win": "npm run build && npx pkg -t node16-win-x64 --out-path release .",
+    "pkg:mac": "npm run build && npx pkg -t node16-macos-x64 --out-path release .",
+    "pkg:linux": "npm run build && npx pkg -t node16-linux-x64 --out-path release .",
+    "pkg:all": "npm run build && npx pkg -t node16-win-x64,node16-macos-x64,node16-linux-x64 --out-path release .",
     "docs": "typedoc --options typedoc.json",
     "e2e:up": "docker-compose -f test/e2e/docker-compose.yml up -d",
-    "e2e:down": "docker-compose -f test/e2e/docker-compose.yml down"
+    "e2e:down": "docker-compose -f test/e2e/docker-compose.yml down",
+    "e2e": "jest --config=jest.e2e.config.js --coverage"
   },
   "dependencies": {
-    "splunk-sdk": "^1.0.0",
     "commander": "^10.0.0",
-    "log4js": "^6.9.1"
+    "log4js": "^6.9.1",
+    "splunk-sdk": "^1.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
     "@types/node": "^20.11.0",
-    "typescript-eslint": "^8.46.0",
+    "pkg": "^5.8.0",
     "dependency-cruiser": "^16.10.4",
     "eslint": "^9.37.0",
     "eslint-plugin-jsdoc": "^50.8.0",
     "eslint-plugin-sonarjs": "^3.0.5",
+    "jest": "^29.6.1",
+    "ts-jest": "^29.1.0",
     "typedoc": "^0.28.14",
     "typedoc-plugin-markdown": "^4.3.0",
-    "jest": "^29.6.1",
-    "ts-jest": "^29.1.0"
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^8.46.0"
   }
 }

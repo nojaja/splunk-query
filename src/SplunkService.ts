@@ -61,7 +61,7 @@ export class SplunkService {
    */
   private _normalizeQuery(query: string) {
     const qtrim = query.trim();
-    return qtrim.replace(/^search\s+/i, '');
+    return qtrim;
   }
 
   /**
