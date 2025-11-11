@@ -7,7 +7,7 @@ import path from 'path';
  * @param {Array<object>} objects - 出力するオブジェクト配列
  * @returns {Promise<void>}
  */
-export async function writeCsv(filePath, objects) {
+export async function writeCsv(filePath: string, objects: Array<Record<string, any>>) {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   if (!objects || objects.length === 0) return await fs.writeFile(filePath, '');
   const keys = Object.keys(objects[0]);

@@ -1,13 +1,10 @@
 services:
   splunk:
-    build:
-      context: .
-      dockerfile: Dockerfile.splunk
-    image: splunk/e2e-test:8.2.0
+    image: splunk/splunk:9.4
     command: start
     environment:
       - SPLUNK_START_ARGS=--accept-license
-      - SPLUNK_PASSWORD
+      - SPLUNK_PASSWORD=testpassword
       - HEC_TOKEN
     user: root
     ports:
