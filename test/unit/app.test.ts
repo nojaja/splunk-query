@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 describe('app.run', () => {
-  const TMP = path.resolve('./test/tmp');
+  const TMP = path.resolve('./test/tmp-app');
   beforeEach(async () => { await fs.mkdir(TMP, { recursive: true }); });
   afterEach(async () => { await fs.rm(TMP, { recursive: true, force: true }); jest.resetAllMocks(); });
 

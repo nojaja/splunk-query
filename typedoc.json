@@ -1,0 +1,6 @@
+{
+  "entryPoints": ["src"],
+  "out": "docs/typedoc",
+  "exclude": ["**/test/**", "**/dist/**"],
+  "tsconfig": "tsconfig.json"
+}

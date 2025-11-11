@@ -9,6 +9,8 @@ export function writeConsole(objects: Array<Record<string, any>>, verbose = fals
   const logger = getLogger(verbose);
   
   if (!objects || objects.length === 0) {
+    // 処理概要: 結果が空の場合の早期リターン
+    // 実装理由: 空データのときはテーブル描画処理を行わず、ユーザーへ情報を出力するため
     logger.info('検索結果が見つかりませんでした。');
     return;
   }
@@ -32,6 +34,9 @@ export function writeConsole(objects: Array<Record<string, any>>, verbose = fals
   const separatorLine = maxLengths.map(length => '-'.repeat(length)).join('-+-');
 
   // ヘッダーを出力
+  // ヘッダーの描画（見出しとセパレータ）
+  // 処理概要: 列幅に合わせてヘッダーと区切り線を整形して一行ずつ出力する
+  // 実装理由: 人間が見やすい表形式で結果を確認できるようにするため
   console.log(headerLine);
   console.log(separatorLine);
 
@@ -45,6 +50,8 @@ export function writeConsole(objects: Array<Record<string, any>>, verbose = fals
     console.log(dataLine);
     
     // 10行ごとに空行を入れる（読みやすさのため）
+    // 処理概要: 表示の視認性向上のため、10行ごとに空行を挿入
+    // 実装理由: 大量データを出力した際にスクロールしやすくするため
     if ((rowIndex + 1) % 10 === 0 && rowIndex < objects.length - 1) console.log('');
   });
 
@@ -62,6 +69,8 @@ export function writeConsoleSimple(objects: Array<Record<string, any>>, verbose 
   const logger = getLogger(verbose);
   
   if (!objects || objects.length === 0) {
+    // 処理概要: 空結果時の早期リターン
+    // 実装理由: 空の場合は何も表示する必要がないため
     logger.info('検索結果が見つかりませんでした。');
     return;
   }
@@ -69,6 +78,8 @@ export function writeConsoleSimple(objects: Array<Record<string, any>>, verbose 
   logger.info(`=== 検索結果 (${objects.length}件) ===`);
   
   objects.forEach((obj, index) => {
+    // 処理概要: オブジェクトごとにキーと値を整形して出力
+    // 実装理由: JSON 風の簡易フォーマットで内容を読みやすくするため
     console.log(`\n[${index + 1}]`);
     for (const [key, value] of Object.entries(obj)) {
       console.log(`  ${key}: ${value}`);

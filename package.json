@@ -4,10 +4,10 @@
   "main": "dist/index.js",
   "bin": "dist/index.js",
   "scripts": {
-    "lint": "eslint . --ext .ts && npx depcruise src",
+    "lint": "eslint . --ext .ts && npx depcruise src --output-type dot > ./docs/dependency-cruiser.dot",
     "lint:fix": "eslint . --ext .ts --fix",
-    "test": "jest --config=jest.config.js --coverage",
-    "build": "tsc -p tsconfig.json",
+    "test": "jest --config=jest.config.js --coverage && npm run lint",
+    "build": "npm run test && tsc -p tsconfig.json && npm run docs",
     "pkg:win": "npm run build && npx pkg -t node16-win-x64 --out-path release .",
     "pkg:mac": "npm run build && npx pkg -t node16-macos-x64 --out-path release .",
     "pkg:linux": "npm run build && npx pkg -t node16-linux-x64 --out-path release .",
