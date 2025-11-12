@@ -21,8 +21,31 @@ describe('csvWriter', () => {
     await writeCsv(file, [{ a: null, b: [1], c: { x: 1 }, d: 'x' } as any]);
     const txt = await fs.readFile(file, 'utf-8');
     // header + one line
-    const lines = txt.split('\n');
-    expect(lines[0]).toContain('a,b,c,d');
-    expect(lines[1]).toContain('"x"');
+  const lines = txt.split('\n');
+  expect(lines[0]).toContain('a,b,c,d');
+  // last column value should be x (null/array/object are emitted empty)
+  const cols = lines[1].split(',');
+  expect(cols[3]).toBe('x');
+  });
+
+  it('escapes commas, newlines and quotes per RFC', async () => {
+    const file = path.join(TMP, 'edges.csv');
+    const objs = [{
+      col1: 'a,b',
+      col2: 'line\nbreak',
+      col3: 'He said "Hello"',
+    } as any];
+
+    await writeCsv(file, objs);
+    const txt = await fs.readFile(file, 'utf-8');
+
+    // Should contain quoted comma field
+    expect(txt).toEqual(expect.stringContaining('"a,b"'));
+
+    // Should contain the newline inside a quoted field
+    expect(txt).toEqual(expect.stringContaining('line\nbreak'));
+
+    // Internal quotes must be doubled inside quoted field
+    expect(txt).toEqual(expect.stringContaining('He said ""Hello""'));
   });
 });
