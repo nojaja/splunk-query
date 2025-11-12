@@ -23,7 +23,7 @@ export interface RunOptions {
  * @param {boolean} options.verbose - 詳細ログ出力の有効/無効
  * @returns {Promise<Array>} - 正規化された検索結果
  */
-export async function run({ query, format = 'json', out, service, verbose }: RunOptions = {}) {
+export async function run({ query, format = 'csv', out, service, verbose }: RunOptions = {}) {
   const logger = getLogger(Boolean(verbose));
   const svc = service || new SplunkService({ verbose });
   

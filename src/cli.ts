@@ -9,7 +9,7 @@ const program = new Command();
 program.option('-q, --query <query>')
   .option('--query-file <path>')
   .option('-f, --file <path>', 'output file')
-  .option('--format <fmt>', 'json|csv|console', 'json')
+  .option('--format <fmt>', 'json|csv|console', 'csv')
   .option('--url <url>', 'Splunk base URL')
   .option('--token <token>', 'Splunk auth token')
   .option('--user <user>', 'Splunk username for management API')
