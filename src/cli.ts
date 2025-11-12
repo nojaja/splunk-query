@@ -7,10 +7,10 @@ import { getLogger } from './utils/logger';
 const program = new Command();
 program.option('-q, --query <query>')
   .option('--query-file <path>')
-  .option('-f, --file <path>', 'output file')
-  .option('--format <fmt>', 'json|csv|console', 'json')
-  .option('--url <url>', 'Splunk base URL')
-  .option('--token <token>', 'Splunk auth token')
+  .option('-o, --output <path>', 'output file')
+  .option('-f, --format <fmt>', 'json|csv|console', 'json')
+  .option('-u, --url <url>', 'Splunk base URL')
+  .option('-t, --token <token>', 'Splunk auth token')
   .option('--user <user>', 'Splunk username for management API')
   .option('--password <password>', 'Splunk password for management API')
   .option('--verbose', 'enable verbose logging')
@@ -48,7 +48,7 @@ program.action(async (opts: any) => {
   const logger = getLogger(opts.verbose);
   const query = await resolveQuery(opts);
   try {
-    const outPath = opts.file || 'out.json';
+  const outPath = opts.output || 'out.json';
     const service = buildService(opts) as SplunkService | undefined;
     await run({ query, format: opts.format, out: outPath, service, verbose: opts.verbose });
     process.exit(0);
