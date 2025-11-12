@@ -91,7 +91,7 @@ export async function cliAction(opts: any): Promise<number> {
   const logger = getLogger(opts.verbose);
   const query = await resolveQuery(opts);
   try {
-    const outPath = opts.file || 'out.json';
+    const outPath = opts.file || undefined;
     const service = buildService(opts) as SplunkService | undefined;
     await run({ query, format: opts.format, out: outPath, service, verbose: opts.verbose });
     return 0;
