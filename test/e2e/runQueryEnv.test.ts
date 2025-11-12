@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { waitForSplunk } from './waitForSplunk';
 
-describe('CLI クエリ実行 (e2e)', () => {
+describe('CLI 環境変数によるクエリ実行 (e2e)', () => {
   let runner: CliRunner;
   const root = process.cwd();
   const splPath = path.resolve(root, 'test.spl');
@@ -18,11 +18,9 @@ describe('CLI クエリ実行 (e2e)', () => {
 
   beforeEach(async () => {
     runner = new CliRunner();
-    // create test.spl at repo root
     const content = `| makeresults format=csv \n` +
       `data="Name,Score\nAlice,70\nBob,65\nCarol,80"`;
     await fs.writeFile(splPath, content, 'utf-8');
-    // remove existing out.json to ensure test starts clean
     try { await fs.unlink(outPath); } catch (e) { /* ignore */ }
   });
 
@@ -33,31 +31,28 @@ describe('CLI クエリ実行 (e2e)', () => {
     try { await fs.unlink(outPath); } catch (e) { /* ignore */ }
   });
 
-  it('`test.spl` を使って実行し `out.json` が期待値になる', async () => {
+  it('環境変数で指定した接続情報を使用して実行し out.json が期待値になる', async () => {
   // wait for Splunk management port to be ready (docker container may take time to initialize)
   await waitForSplunk('localhost', 8089);
 
-    // start CLI
+    // start CLI without --url/--user/--password; provide them via env
     runner.start(
       {
         command: process.execPath,
-        args: [
-          'dist/index.js',
-          '--url',
-          'https://localhost:8089/',
-          '--user',
-          'admin',
-          '--password',
-          'testpassword',
-          '--query-file',
-          'test.spl',
-        ],
+        args: ['dist/index.js', '--query-file', 'test.spl'],
         cwd: root,
+        env: {
+          // copy parent env to avoid losing PATH/node info
+          ...(process.env || {}),
+          SPLUNK_URL: 'https://localhost:8089/',
+          SPLUNK_USER: 'admin',
+          SPLUNK_PASSWORD: 'testpassword',
+        },
       },
       20000,
     );
 
-    // wait some output (not strictly necessary but ensures CLI had time to run)
+    // wait some output
     await runner.readStdout().toLines(10000).catch(() => []);
 
     // wait for out.json to appear (give the CLI up to 10s)

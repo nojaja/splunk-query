@@ -39,18 +39,23 @@ export async function resolveQuery(opts: any): Promise<string> {
 }
 
 /**
- * コマンドラインオプションからSplunkServiceインスタンスを構築します
- * @param {object} opts - コマンドラインオプション
- * @returns {SplunkService|null} - SplunkServiceインスタンスまたはnull
- */
-/**
- * buildService - コマンドラインオプションからSplunkServiceを構築します
+ * buildService - コマンドラインオプション（優先）または環境変数から
+ * SplunkService を構築して返します。
  * @param opts コマンドラインオプションオブジェクト
- * @returns SplunkServiceインスタンスかundefined
+ * @returns SplunkService インスタンスまたは undefined
  */
 export function buildService(opts: any) {
-  if (opts.url || opts.token || opts.user || opts.password) {
-    return new SplunkService({ baseUrl: opts.url, token: opts.token, username: opts.user, password: opts.password, verbose: opts.verbose, insecure: Boolean(opts.insecure) });
+  // allow configuration via command-line options OR environment variables
+  const baseUrl = opts.url || process.env.SPLUNK_URL;
+  const token = opts.token || process.env.SPLUNK_TOKEN;
+  const username = opts.user || process.env.SPLUNK_USER;
+  const password = opts.password || process.env.SPLUNK_PASSWORD;
+  const insecure = Boolean(opts.insecure) || process.env.SPLUNK_SKIP_TLS_VERIFY === '1';
+  const verbose = opts.verbose;
+
+  // If any connection detail is present (from CLI or env), construct service
+  if (baseUrl || token || username || password) {
+    return new SplunkService({ baseUrl, token, username, password, verbose, insecure });
   }
   return undefined;
 }

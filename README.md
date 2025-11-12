@@ -23,3 +23,5 @@ node ./dist/index.js --help
 ```
 
 Notes: Splunk の接続情報は環境変数で指定できます（SPLUNK_URL, SPLUNK_TOKEN, SPLUNK_USER, SPLUNK_PASSWORD, SPLUNK_MGMT_PORT）。
+
+※.env を使用する場合はプロジェクトのルートに配置してください（起動時に自動で読み込まれます）。
