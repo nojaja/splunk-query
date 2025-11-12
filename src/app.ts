@@ -14,7 +14,9 @@ export interface RunOptions {
 }
 
 /**
- * Splunk検索を実行し、指定された形式で結果を出力します
+ * 処理名: run - Splunk検索実行および出力処理
+ * 処理概要: Splunk に対して検索を実行し、結果を正規化して指定された形式で出力する
+ * 実装理由: CLI から検索結果を統一的に扱い、CSV/JSON/コンソールなど複数の出力先に柔軟に対応するため
  * @param {object} options - 実行オプション
  * @param {string} options.query - 検索クエリ
  * @param {string} options.format - 出力形式 ('json', 'csv', 'console')
