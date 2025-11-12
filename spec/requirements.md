@@ -6,8 +6,8 @@
   - `-t, --token <token>` : Splunk 管理トークン / HEC トークン
   - `--query <string>` : クエリ文字列（優先度最高）
   - `--query-file <path>` : クエリを格納したファイル
-  - `--format <csv|json|console>` : 出力形式（デフォルト: csv）
-  - `-f, --file <path>` : 出力先ファイルパス（省略時は stdout）
+  - `-f, --format <csv|json|console>` : 出力形式（デフォルト: json）
+  - `-o, --output <path>` : 出力先ファイルパス（省略時は stdout）
   - `--verbose` : 詳細ログを有効化
 
 - 入力優先度: `--query` > `--query-file` > stdin

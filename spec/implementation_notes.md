@@ -81,7 +81,7 @@ Start-Sleep -Seconds 120
 pwsh ./init-splunk.ps1 -MgmtHost 'https://localhost:8089' -AdminPassword 'changeme'
 # ローカルの CLI を実行
 cd ..\..
-node src/cli.js --query "search index=_internal | head 1" --url http://localhost:8000 --token admin:changeme --out test/e2e/out.json
+node src/cli.js --query "search index=_internal | head 1" --url http://localhost:8000 --token admin:changeme --output test/e2e/out.json
 # 検証: test/e2e/out.json の存在と中身を確認
 docker-compose down
 ```
