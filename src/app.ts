@@ -34,16 +34,14 @@ export async function run({ query, format = 'json', out, service, verbose }: Run
   logger.progress(`${rows.length}件の結果を取得しました`);
   
   if (format === 'csv') {
-    if (!out) throw new Error('out file path required for csv');
-    await writeCsv(out, rows as any);
-    logger.success('CSV出力が完了しました:', out);
+    await writeCsv(out as any, rows as any);
+    logger.success('CSV出力が完了しました:', out || 'stdout');
   } else if (format === 'console') {
     writeConsole(rows as any, Boolean(verbose));
     logger.success('コンソール出力が完了しました');
   } else {
-    if (!out) throw new Error('out file path required for json');
-    await writeJson(out, rows as any);
-    logger.success('JSON出力が完了しました:', out);
+    await writeJson(out as any, rows as any);
+    logger.success('JSON出力が完了しました:', out || 'stdout');
   }
   
   return rows;

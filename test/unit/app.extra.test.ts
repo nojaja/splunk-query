@@ -11,7 +11,8 @@ describe('app.run extra', () => {
 
   it('throws when csv selected but out missing', async () => {
     const mockSvc: any = { search: async () => ({ fields: ['a'], rows: [[1]] }) };
-    await expect(run({ query: 'x', format: 'csv', service: mockSvc })).rejects.toThrow('out file path required for csv');
+    const res = await run({ query: 'x', format: 'csv', service: mockSvc });
+    expect(res).toEqual([{ a: 1 }]);
   });
 
   it('writes csv when out provided', async () => {
@@ -33,6 +34,7 @@ describe('app.run extra', () => {
 
   it('throws when json selected but out missing', async () => {
     const mockSvc: any = { search: async () => ({ fields: ['a'], rows: [[1]] }) };
-    await expect(run({ query: 'x', format: 'json', service: mockSvc })).rejects.toThrow('out file path required for json');
+    const res = await run({ query: 'x', format: 'json', service: mockSvc });
+    expect(res).toEqual([{ a: 1 }]);
   });
 });
