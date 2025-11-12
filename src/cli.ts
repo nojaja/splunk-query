@@ -38,8 +38,16 @@ async function resolveQuery(opts: any): Promise<string> {
  * @returns {SplunkService|null} - SplunkServiceインスタンスまたはnull
  */
 function buildService(opts: any) {
-  if (opts.url || opts.token || opts.user || opts.password) {
-    return new SplunkService({ baseUrl: opts.url, token: opts.token, username: opts.user, password: opts.password, verbose: opts.verbose, insecure: Boolean(opts.insecure) });
+  // allow configuration via command-line options OR environment variables
+  const baseUrl = opts.url || process.env.SPLUNK_URL;
+  const token = opts.token || process.env.SPLUNK_TOKEN;
+  const username = opts.user || process.env.SPLUNK_USER;
+  const password = opts.password || process.env.SPLUNK_PASSWORD;
+  const insecure = Boolean(opts.insecure) || process.env.SPLUNK_SKIP_TLS_VERIFY === '1';
+  const verbose = opts.verbose;
+
+  if (baseUrl || token || username || password) {
+    return new SplunkService({ baseUrl, token, username, password, verbose, insecure });
   }
   return undefined;
 }
