@@ -202,6 +202,14 @@ export class SplunkService {
       svc.oneshotSearch(`${qbody}`, { output_mode: 'json', count: 100 }, (err: any, results: any) => {
         if (err) {
           this.verbose && this.logger.debug('oneshotSearch error', err);
+          // attach a code to native/network errors so upstream can map exit codes
+          if (!(err instanceof SearchError)) {
+            try {
+              (err as any).code = (err && (err.code || (err as any).errno)) || 'NETWORK_ERROR';
+            } catch (_) {
+              (err as any).code = 'NETWORK_ERROR';
+            }
+          }
           return reject(err);
         }
         try {
@@ -269,8 +277,8 @@ export class SplunkService {
    * @returns {Promise<object>} - 検索結果（fields, rows, results）
    */
   async search(query: string) {
-    if (!query) throw new SearchError('query required');
-    if (!this.baseUrl) throw new SearchError('baseUrl required');
+    if (!query) throw new SearchError('query required', { code: 'QUERY_REQUIRED' });
+    if (!this.baseUrl) throw new SearchError('baseUrl required', { code: 'BASEURL_REQUIRED' });
 
     const qbody = this._normalizeQuery(query);
     let service = this._createService();
@@ -311,7 +319,8 @@ export class SplunkService {
     if (this._shouldRetry(text, code, err)) {
       return await this._retryWithMgmtPort(qbody);
     }
-    throw err instanceof SearchError ? err : new SearchError('network error', err);
+    if (err instanceof SearchError) throw err;
+    throw new SearchError('network error', { code: 'NETWORK_ERROR', cause: err });
   }
 
   /**
@@ -350,6 +359,6 @@ export class SplunkService {
    */
   private _handleRetryError(err: any): never {
     this.verbose && this.logger.debug('retry exception', err);
-    throw new SearchError('search failed', err);
+    throw new SearchError('search failed', { code: 'SEARCH_FAILED', cause: err });
   }
 }
