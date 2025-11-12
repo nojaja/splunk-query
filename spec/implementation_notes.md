@@ -8,10 +8,10 @@
 - commander
 - dotenv
 - splunk-sdk
-- csv (または csv-stringify)
+- csv (csv-stringify)
 - log4js
 - jest
-- webpack, pkg (オプション)
+- pkg (オプション)
 
 SplunkService 実装ヒント
 - コンストラクタで { url, token, verbose } を受け取り、インスタンス変数に保持する。

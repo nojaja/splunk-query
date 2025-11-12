@@ -6,9 +6,9 @@ Splunk に対して検索を実行し、その結果を CSV / JSON / console に
 
 ゴール
 ----
-- Node.js (v18+) を対象とした ESM モジュールで実装すること。
+- Node.js (v18+) を対象とした TypeScriptで実装すること。
 - CLI は `commander` を用いて実装すること。
-- Splunk への接続は `splunk-sdk`（または REST 代替）を用い、Search の結果を `{ fields, rows }` 形式で扱うこと。
+- Splunk への接続は `splunk-sdk`（または REST 代替）を用い、Search の結果を `{ fields, rows, rawresults }` 形式で扱うこと。
 - 出力は CSV（`csv` パッケージまたは標準実装）、JSON、console のいずれかを選べること。
 - static import/export のみを使用し、dynamic import（import()）は禁止する。
 

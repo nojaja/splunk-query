@@ -8,15 +8,15 @@ CLI -> App -> SplunkService -> normalizeResults -> OutputWriter という単純�
 
 ```
 src/
-  cli.js            # commander を使った CLI パーサ
-  index.js          # エントリポイント: dotenv 読込 -> cli -> app 実行
-  app.js            # ワークフロー実装 (入力取得->検索->整形->出力)
-  SplunkService.js  # Splunk 接続と検索を担う (静的 import のみ)
+  cli.ts            # commander を使った CLI パーサ
+  index.ts          # エントリポイント: dotenv 読込 -> cli -> app 実行
+  app.ts            # ワークフロー実装 (入力取得->検索->整形->出力)
+  SplunkService.ts  # Splunk 接続と検索を担う (静的 import のみ)
   utils/
-    normalizeResults.js
+    normalizeResults.ts
   output/
-    csvWriter.js
-    jsonWriter.js
+    csvWriter.ts
+    jsonWriter.ts
 test/
   unit/
   e2e/
@@ -56,9 +56,10 @@ export function writeJson({ fields, rows }, filePath)
 
 データ形状
 
-- 検索結果: { fields: string[], rows: any[][] }
+- 検索結果: { fields: string[], rows: any[][], rawresults: any[] }
   - fields: フィールド名の配列
   - rows: 各行が fields と同じ長さの配列
+  - rawresults: fields/rowsの元データ
 
 エラー設計
 

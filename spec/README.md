@@ -1,7 +1,5 @@
 # spec_v5
 
-このディレクトリは `spec/` と `spec_v4/` を比較して欠落していた実装情報を補完し、単独で実装に必要な情報を網羅した仕様書です。
-
 含まれるファイル:
 - `copilot_prompt.txt` - Copilot に渡すべき実装プロンプト（日本語）
 - `spec.md` - 概要と受け入れ基準
@@ -18,7 +16,7 @@
 設定:
 
 ```
-// .eslintrc.cjs
+// eslint.config.cjs
 module.exports = {
 	extends: ['eslint:recommended'],
 	plugins: ['sonarjs'],
