@@ -142,3 +142,4 @@ coverage/
 /release
 /test-results
 /playwright-report
+/docs/typedoc

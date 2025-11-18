@@ -12,38 +12,37 @@ import { stringify } from 'csv-stringify/sync';
  * @returns {Promise<void>}
  */
 export async function writeCsv(filePath: string | undefined, objects: Array<Record<string, any>>) {
+  /**
+   * オブジェクト配列からCSV文字列を構築します
+   * @param {Array<Record<string, any>>} objs - CSV化するオブジェクト配列
+   * @returns {string} CSV文字列
+   */
+  const buildCsv = (objs: Array<Record<string, any>>) => {
+    const keys = Object.keys(objs[0]);
+    const records = objs.map((o) => keys.map((k) => {
+      const v = o[k];
+      if (v === null || v === undefined) return '';
+      // For objects/arrays we emit empty string (keep previous behavior)
+      if (typeof v === 'object') return '';
+      return String(v);
+    }));
+    return stringify(records, { header: true, columns: keys });
+  };
+
   if (!filePath) {
     // write to stdout
     if (!objects || objects.length === 0) {
       process.stdout.write('');
       return;
     }
-    const keys = Object.keys(objects[0]);
-    const lines = [keys.join(','), ...objects.map(o => keys.map(k => {
-      const v = o[k];
-      if (v === null || v === undefined) return '';
-      if (typeof v === 'object' || Array.isArray(v)) return '';
-      return JSON.stringify(v);
-    }).join(','))];
-    process.stdout.write(lines.join('\n'));
+    const csv = buildCsv(objects);
+    process.stdout.write(csv);
     return;
   }
 
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   if (!objects || objects.length === 0) return await fs.writeFile(filePath, '');
 
-  const keys = Object.keys(objects[0]);
-
-  // Build records as arrays in the same column order as keys
-  const records = objects.map((o) => keys.map((k) => {
-    const v = o[k];
-    if (v === null || v === undefined) return '';
-    // For objects/arrays we emit empty string (same behavior as before)
-    if (typeof v === 'object') return '';
-    return String(v);
-  }));
-
-  // Use csv-stringify sync to produce RFC-compliant CSV. Provide header row.
-  const csv = stringify(records, { header: true, columns: keys });
+  const csv = buildCsv(objects);
   await fs.writeFile(filePath, csv);
 }
